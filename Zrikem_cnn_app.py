@@ -1,5 +1,5 @@
 import streamlit as st
-import tensorflow as tf
+import tensorflow
 import requests
 import numpy as np
 from PIL import Image
@@ -7,10 +7,10 @@ from io import BytesIO
 import os
 import cv2
 
-from tf.keras.models import load_model
-from tf.keras.applications import MobileNetV2
-from tf.keras.applications.mobilenet_v2 import preprocess_input, decode_predictions
-from tf.keras import layers, models
+from tensorflow.keras.models import load_model
+from tensorflow.keras.applications import MobileNetV2
+from tensorflow.keras.applications.mobilenet_v2 import preprocess_input, decode_predictions
+from tensorflow.keras import layers, models
 
 
 def cnn():
