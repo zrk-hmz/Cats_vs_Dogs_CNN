@@ -7,10 +7,10 @@ from io import BytesIO
 import os
 import cv2
 
-from tensorflow.keras.models import load_model
-from tensorflow.keras.applications import MobileNetV2
-from tensorflow.keras.applications.mobilenet_v2 import preprocess_input, decode_predictions
-from tensorflow.keras import layers, models
+from keras.models import load_model
+from keras.applications import MobileNetV2
+from keras.applications.mobilenet_v2 import preprocess_input, decode_predictions
+from keras import layers, models
 
 
 def cnn():
@@ -60,22 +60,28 @@ with col2:
 
 col4, col5, col6= st.columns([1, 1, 1])
 with col4:
-        model_path= st.text_input("📂 Enter Model Path")
-        if model_path:
-                model_pth = os.path.normpath(model_path)
-                st.write(f"Input Model Path: {model_path}")
-                try:
-                    model_T = load_model(model_pth)
-                    img_shape = model_T.layers[0].input_shape[1:3]
-                    img_shape = img_shape[::-1]
-                except Exception as e:
-                    st.error(f"Error loading the model: {e}")
-                #if os.path.isfile(model_path):
-                #        model_T = load_model(model_path)
-                #        img_shape = model_T.layers[0].input_shape[1:3]
-                #        img_shape = img_shape[::-1]
-                #else:
-                #        st.warning("Invalid file path. Please enter a valid path.")
+        model_file = st.file_uploader("📂 Upload a model file",
+                                                     type=["h5"],
+                                                     accept_multiple_files=False)
+        if model_file is not None:
+                css =   '''<style>
+                                        [data-testid="stHorizontalBlock"]+[data-testid="stHorizontalBlock"]>
+                                        div>div>div>div>div>section{
+                                                display: none;
+                                        }
+                                        [data-testid="stHorizontalBlock"]+[data-testid="stHorizontalBlock"]>
+                                        div+div>div>div>div>div>section{
+                                                display: flex;
+                                        }
+                        </style>'''
+                st.markdown(css, unsafe_allow_html=True)
+                with open("temp_model.h5", "wb") as f:
+                        f.write(model_file.getvalue())
+
+                model_T = load_model("temp_model.h5")
+                img_shape = model_T.layers[0].input_shape[1:3]
+                img_shape = img_shape[::-1]
+
 with col5:
         image_file= st.file_uploader("🎴 Upload image",
                                 type=["jpg", "jpeg", "png"] ,
@@ -116,11 +122,12 @@ with col5:
         st.markdown(css, unsafe_allow_html=True)
         if image_file is not None:
                 css =   '''<style>
-                                        [data-testid="stFileUploader"]>section{
+                                        [data-testid="stHorizontalBlock"]+[data-testid="stHorizontalBlock"]>
+                                        div+div>div>div>div>div>section{
                                                 display: none;
                                         }
-                                        [data-testid="stHorizontalBlock"]+[data-testid="stHorizontalBlock"]>div+div+div>div>div>div>div>div>div{
-                                                display: none;
+                                        [data-testid="stFileUploader"]>section+section{
+                                                display: flex;
                                         }
                         </style>'''
                 st.markdown(css, unsafe_allow_html=True)
