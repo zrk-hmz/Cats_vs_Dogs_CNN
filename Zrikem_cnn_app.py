@@ -62,12 +62,19 @@ col4, col5, col6= st.columns([1, 1, 1])
 with col4:
         model_path= st.text_input("📂 Enter Model Path")
         if model_path:
-                if os.path.isfile(model_path):
-                        model_T = load_model(model_path)
-                        img_shape = model_T.layers[0].input_shape[1:3]
-                        img_shape = img_shape[::-1]
-                else:
-                        st.warning("Invalid file path. Please enter a valid path.")
+                st.write(f"Input Model Path: {model_path}")
+                try:
+                    model_T = load_model(model_path)
+                    img_shape = model_T.layers[0].input_shape[1:3]
+                    img_shape = img_shape[::-1]
+                except Exception as e:
+                    st.error(f"Error loading the model: {e}")
+                #if os.path.isfile(model_path):
+                #        model_T = load_model(model_path)
+                #        img_shape = model_T.layers[0].input_shape[1:3]
+                #        img_shape = img_shape[::-1]
+                #else:
+                #        st.warning("Invalid file path. Please enter a valid path.")
 with col5:
         image_file= st.file_uploader("🎴 Upload image",
                                 type=["jpg", "jpeg", "png"] ,
