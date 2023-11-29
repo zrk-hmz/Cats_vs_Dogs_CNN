@@ -63,8 +63,9 @@ with col4:
         model_path= st.text_input("📂 Enter Model Path")
         if model_path:
                 st.write(f"Input Model Path: {model_path}")
+                model_pth = os.path.normpath(model_path)
                 try:
-                    model_T = load_model(model_path)
+                    model_T = load_model(model_pth)
                     img_shape = model_T.layers[0].input_shape[1:3]
                     img_shape = img_shape[::-1]
                 except Exception as e:
